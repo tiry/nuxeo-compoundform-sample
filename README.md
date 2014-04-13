@@ -1,0 +1,2 @@
+nuxeo-compoundform-sample
+=========================
