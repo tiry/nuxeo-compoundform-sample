@@ -23,73 +23,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.faces.component.UIComponent;
-import javax.faces.event.ValueChangeEvent;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jboss.seam.ScopeType;
-import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
-import org.jboss.seam.faces.FacesMessages;
-import org.nuxeo.ecm.core.api.CoreSession;
-import org.nuxeo.ecm.platform.ui.web.api.NavigationContext;
-import org.nuxeo.ecm.platform.ui.web.component.list.UIEditableList;
 
 @Name("complexSelectorBean")
 @Scope(ScopeType.EVENT)
-public class ComplexSelectorBeanBean implements Serializable {
+public class ComplexSelectorBeanBean extends BaseActionListener implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private static final Log log = LogFactory.getLog(ComplexSelectorBeanBean.class);
-
-    @In(create = true, required = false)
-    protected transient CoreSession documentManager;
-
-    @In(create = true)
-    protected NavigationContext navigationContext;
-
-    @In(create = true, required = false)
-    protected transient FacesMessages facesMessages;
-
-    protected Object value;
-
-
-    protected void cleanUpList(UIEditableList listComponent) {
-        //listComponent.resetValue();
-
-        /*
-        while (listComponent.getRowCount()>0) {
-            //listComponent.removeValue(0);
-            listComponent.getEditableModel().removeValue(0);
-            //listComponent.getEditableModel().recordValueModified(index, newValue)
-        }*/
-
-        /*
-        for (int i = listComponent.getRowCount()-1; i >=0; i-- ) {
-            listComponent.removeValue(i);
-        }*/
-    }
-
-    public void valueChanged(ValueChangeEvent evt) {
-
-        value = evt.getNewValue();
-        String sourceId = evt.getComponent().getId();
-
-        UIEditableList listComponent = findEditableList(evt.getComponent().getParent());
-
-        cleanUpList(listComponent);
-
-        List<Map<String, Serializable>> newEntries = getValues(value.toString());
-
-        for (Map<String, Serializable> newEntry : newEntries) {
-            listComponent.addValue(newEntry);
-        }
-    }
-
-    protected List<Map<String, Serializable>> getValues(String key) {
+    protected List<Map<String, Serializable>> getComplexValues(String key) {
         List<Map<String, Serializable>> result = new ArrayList<>();
         for (int i = 0; i <3; i++) {
             Map<String, Serializable> entry = new HashMap<String, Serializable>();
@@ -100,34 +44,4 @@ public class ComplexSelectorBeanBean implements Serializable {
         }
         return result;
     }
-
-    protected UIEditableList findEditableList(UIComponent component) {
-
-        if (component.getClass().equals(UIEditableList.class)) {
-            return (UIEditableList) component;
-        }
-        for (UIComponent child : component.getChildren()) {
-            UIEditableList list = findEditableList(child);
-            if (list!=null) {
-                return list;
-            }
-        }
-        return null;
-    }
-
-    protected void dumpTree(String prefix, UIComponent component) {
-        log.error(prefix + component.getId() + "[" + component.getClass().getSimpleName() + "]" );
-        for (UIComponent child : component.getChildren()) {
-            dumpTree(prefix + ":" + component.getId(), child);
-        }
-    }
-
-    public String getTS() {
-        if (value!=null) {
-            return "" + System.currentTimeMillis() + "--" + value.toString();
-        } else {
-            return "" + System.currentTimeMillis();
-        }
-    }
-
 }
