@@ -1,12 +1,13 @@
-<div xmlns:f="http://java.sun.com/jsf/core"
+<a4j:outputPanel xmlns:f="http://java.sun.com/jsf/core"
   xmlns:h="http://java.sun.com/jsf/html"
   xmlns:c="http://java.sun.com/jstl/core"
   xmlns:nxu="http://nuxeo.org/nxweb/util"
   xmlns:nxd="http://nuxeo.org/nxweb/document"
   xmlns:nxl="http://nuxeo.org/nxforms/layout"
   xmlns:ui="http://java.sun.com/jsf/facelets"
-  xmlns:a4j="https://ajax4jsf.dev.java.net/ajax" id="#{widget.id}_container">
+  xmlns:a4j="https://ajax4jsf.dev.java.net/ajax" id="#{widget.id}_container" layout="block">
 
+  <div id="#{widget.id}_divcontainer">
   <c:set var="namespace" value="#{widgetProperty_namespace}" />
 
   <c:if test="#{widget.mode == 'view'}">
@@ -17,8 +18,8 @@
 
       <script>
       function updateSubTree() {
-        var value = jQuery("##{widget.id}_container").find("input[id$=nxw_suggestOneDirectory_select2]").val();
-        #{widget.id}_reRender(value);
+        var value = jQuery("##{widget.id}_divcontainer").find("input[id$=nxw_suggestOneDirectory_select2]").val();
+        #{widget.id}_reRender('#{widget.id}_container', value);
       }
       </script>
 
@@ -39,7 +40,8 @@
       <a4j:region>
           <a4j:jsFunction name="#{widget.id}_reRender"
             reRender="#{widget.id}_nestedLayout">
-            <a4j:actionparam name="param1" assignTo="#{widgetProperty_valueListener}"/>
+            <a4j:actionparam name="param1" assignTo="#{widgetProperty_valueListenerScope}"/>
+            <a4j:actionparam name="param2" assignTo="#{widgetProperty_valueListener}"/>
           </a4j:jsFunction>
       </a4j:region>
 
@@ -49,5 +51,5 @@
 
   </c:if>
 
-
 </div>
+</a4j:outputPanel>

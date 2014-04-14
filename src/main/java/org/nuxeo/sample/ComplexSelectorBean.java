@@ -27,6 +27,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 
+import org.ajax4jsf.renderkit.RendererUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.seam.ScopeType;
@@ -59,26 +60,30 @@ public class ComplexSelectorBean implements Serializable {
     private static final Log log = LogFactory.getLog(ComplexSelectorBean.class);
 
     protected void cleanUpList(UIEditableList listComponent) {
-        //listComponent.resetValue();
-
-        /*
-        while (listComponent.getRowCount()>0) {
-            //listComponent.removeValue(0);
-            listComponent.getEditableModel().removeValue(0);
-            //listComponent.getEditableModel().recordValueModified(index, newValue)
-        }*/
-
-        /*
         for (int i = listComponent.getRowCount()-1; i >=0; i-- ) {
             listComponent.removeValue(i);
-        }*/
+        }
     }
 
+    protected String selectedScope;
+
+    public void setSelectedScope(String scope) {
+        selectedScope =scope;
+    }
 
     public void setSelectedValue(String value) {
 
+        log.error("scope=" + selectedScope);
         selectedValue = value;
-        UIEditableList listComponent = findEditableList(FacesContext.getCurrentInstance().getViewRoot());
+
+        UIComponent root = FacesContext.getCurrentInstance().getViewRoot();
+
+        UIComponent widgetContainer = RendererUtils.getInstance().findComponentFor(root, selectedScope);
+
+        UIEditableList listComponent = findEditableList(widgetContainer);
+
+        cleanUpList(listComponent);
+
         if (value!=null) {
             List<Map<String, Serializable>> newEntries = getComplexValues(value.toString());
 
@@ -93,28 +98,9 @@ public class ComplexSelectorBean implements Serializable {
         return selectedValue;
     }
 
-    public void valueChanged(ValueChangeEvent evt) {
-
-        Object value = evt.getNewValue();
-
-
-        UIEditableList listComponent = findEditableList(evt.getComponent().getParent());
-
-        cleanUpList(listComponent);
-
-        if (value!=null) {
-            selectedValue = value.toString();
-            List<Map<String, Serializable>> newEntries = getComplexValues(selectedValue);
-
-            for (Map<String, Serializable> newEntry : newEntries) {
-                listComponent.addValue(newEntry);
-            }
-        }
-    }
-
     protected UIEditableList findEditableList(UIComponent component) {
 
-        if (component.getClass().equals(UIEditableList.class)) {
+        if (component.getClass().equals(UIEditableList.class) ) {
             return (UIEditableList) component;
         }
         for (UIComponent child : component.getChildren()) {

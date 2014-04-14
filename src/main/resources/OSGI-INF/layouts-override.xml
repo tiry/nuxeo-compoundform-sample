@@ -81,6 +81,7 @@
           <property name="nestedLayout">complexListForm@create</property>
           <property name="onchange">updateSubTree();</property>
           <property name="valueListener">#{complexSelectorBean.selectedValue}</property>
+          <property name="valueListenerScope">#{complexSelectorBean.selectedScope}</property>
         </properties>
       </widget>
     </layout>
