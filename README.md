@@ -11,6 +11,16 @@ The goal is to have a template widget that :
  - contains an ajaxRendered subLayout
  - use a valueChangedListener to pre-fill the subLayout depending on the value selected for the 'key' field
 
+# Status
+
+This is a work in progress.
+
+For now, to make debugging simpler, the project includes an extract of a studio project that define the doctype, schemas and layouts.
+
+The goal is to define the template widget and then to reintegrate it inside Nuxeo Studio : removing most of the config from this bundle.
+
+Ideally, this bundle should only hold the Seam Beans.
+
 # Open Questions
 
 ## valueChangeListener
