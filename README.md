@@ -9,52 +9,58 @@ The goal is to have a template widget that :
 
  - contains the 'key' field
  - contains an ajaxRendered subLayout
- - use a valueChangedListener to pre-fill the subLayout depending on the value selected for the 'key' field
+ - use a Seam bean to pre-fill the subLayout depending on the value selected for the 'key' field
 
 # Status
 
-This is a work in progress.
+All the configuration comes from a Studio project called `compound-form`.
 
-For now, to make debugging simpler, the project includes an extract of a studio project that define the doctype, schemas and layouts.
+To avoid having to add Studio credentials to the build, a compy of the studio jar in available in the studio directory :
 
-The goal is to define the template widget and then to reintegrate it inside Nuxeo Studio : removing most of the config from this bundle.
+    studio/compound-form.jar
 
-Ideally, this bundle should only hold the Seam Beans.
+# Deploying
 
-# Open Questions
+## Nuxeo IDE
 
-## valueChangeListener
+This java module can be deployed via Nuxeo IDE.
 
-To make the system work, I need to have a `valueChangeListener`.
+In this case, you should reference the Studio `compound-form` project so that everything is deployed at the same time.
 
-I use `valueChangeListener` to prepopulate the n:ested layout depending on the current value.
+## Bare Java
 
-This processing is done inside a Seam bean.
+Build the jar : 
 
-### Select2 and valueHolder
+    mvn clean install
 
-This works for a inputText, but when I try to use a select2, I need to bind a `valueChangeListener` to the `valueHolder`, but it does not seem to work.
+Deploy the jar
 
-### resolveTwice
+    cp target/nuxeo-compoundform-sample-5.9.3.jar $NXSERVER/plugins/.
 
-Ideally, I would like the `valueChangeListener` to be configurable as widget property.
-But in this case, I need to be able to do a double resolution.
+Deploy the Studio jar 
 
-I tried with :
+    cp studio/compound-form.jar $NXSERVER/plugins/.
 
-    <nxu:set var="listener" value="#{widgetProperty_valueChangeListener}" resolveTwice="true">
+And restart the Nuxeo Server
 
-But since the `valueChangeListener` is a method binding the double resolution fails.
+# Configuring
 
-## UIEditableList
+There are 2 places to adjust the way this sample works.
 
-During the processing of the valueChangeListener, I update the content of the UIEditableList.
+## Inside Nuxeo Studio
 
-Adding entries is not a problem.
+Everything  is driven by the `generic` widget inside the Master layout in `create` mode.
 
-However, I am not able to remove values or to reset it.
+You can use the widget properties to define :
 
+ - the name of the subLayout
+ - the Seam Beans bindings
 
+## Inside the Nuxeo IDE project
 
+If you adjust the schemas, you will need to make sure the `getComplexValues` of the `ComplexSelectorBean` returns the correct values.
 
+The idea is that you may of course have several bindings : you will then need several Beans.
+
+NB : Because of some hot-reload issues in Nuxeo IDE with Seam Beans, the `ComplexSelectorBean` has no base class, but in the real world it should.
 

@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.compoundform.widget.contrib" version="1.0.0">
+
+  <extension target="org.nuxeo.ecm.platform.forms.layout.WebLayoutManager"
+    point="widgettypes">
+
+    <widgetType name="suggestWithPreFill">
+      <configuration>
+        <sinceVersion>5.9.3</sinceVersion>
+        <title>Suggest With PreFill</title>
+        <description>
+          <p>Uses Select2 to choose and key and then automatically prefill a nested complex type</p>
+        </description>
+        <categories>
+          <category>document</category>
+        </categories>
+        <supportedModes>
+          <mode>view</mode>
+          <mode>edit</mode>
+        </supportedModes>
+        <fields>
+          <list>true</list>
+          <complex>false</complex>
+          <supportedTypes>
+            <type>string</type>
+          </supportedTypes>
+        </fields>
+        <properties>
+        </properties>
+      </configuration>
+      <handler-class>
+        org.nuxeo.ecm.platform.forms.layout.facelets.plugins.TemplateWidgetTypeHandler
+      </handler-class>
+      <property name="template">
+       /widgets/complexSuggestSelector_widget_template.xhtml
+      </property>
+    </widgetType>
+
+  </extension>
+
+</component>

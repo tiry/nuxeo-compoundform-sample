@@ -4,10 +4,8 @@ Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Bundle-Version: 5.9.2
 Bundle-Name: nuxeo-compoundform-sample
+Nuxeo-Component: OSGI-INF/widgettypes-contrib.xml
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: nuxeo-compoundform-sample
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Nuxeo-Component: OSGI-INF/extensions.xml,
- OSGI-INF/layouts-override.xml
-
 

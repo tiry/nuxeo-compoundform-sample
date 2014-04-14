@@ -2,9 +2,9 @@
 <project>
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.nuxeo.ecm.platform</groupId>
-    <artifactId>nuxeo-features-parent</artifactId>
-    <version>5.9.2</version>
+    <groupId>org.nuxeo</groupId>
+    <artifactId>nuxeo-addons-parent</artifactId>
+    <version>5.9.3</version>
   </parent>
   <groupId>org.nuxeo</groupId>
   <artifactId>nuxeo-compoundform-sample</artifactId>
@@ -36,9 +36,30 @@
       <artifactId>nuxeo-core-schema</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>osgi-core</artifactId>
+      <groupId>javax.faces</groupId>
+      <artifactId>jsf-api</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.jboss.seam</groupId>
+      <artifactId>jboss-seam</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.nuxeo.ecm.platform</groupId>
+      <artifactId>nuxeo-platform-ui-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.richfaces.framework</groupId>
+      <artifactId>richfaces-impl</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jcl-over-slf4j</artifactId>
+    </dependency>
+<!--    <dependency>
+      <groupId>nuxeo-studio</groupId>
+      <artifactId>compound-form</artifactId>
+      <version>0.0.0-SNAPSHOT</version>
+    </dependency>-->
   </dependencies>
   <build>
     <plugins>

@@ -25,7 +25,6 @@ import java.util.Map;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ValueChangeEvent;
 
 import org.ajax4jsf.renderkit.RendererUtils;
 import org.apache.commons.logging.Log;
@@ -47,9 +46,11 @@ public class ComplexSelectorBean implements Serializable {
         List<Map<String, Serializable>> result = new ArrayList<>();
         for (int i = 0; i <3; i++) {
             Map<String, Serializable> entry = new HashMap<String, Serializable>();
-            entry.put("entryLabel", "Label " + key + " " + i);
-            entry.put("entryName", "Name " + key + " " + i);
-            entry.put("entryTyp", "Type " + key + " " + i);
+            entry.put("identifier", "id-" + key + " " + i);
+            entry.put("protocol", "Protocol " + key + " " + i);
+            entry.put("domain", "Domain " + key + " " + i);
+            entry.put("registrantName", "Registrant " + key + " " + i);
+            entry.put("description", "Description " + key + " " + i);
             result.add(entry);
         }
         return result;
