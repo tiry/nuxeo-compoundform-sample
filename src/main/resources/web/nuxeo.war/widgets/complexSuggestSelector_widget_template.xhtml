@@ -5,47 +5,47 @@
   xmlns:nxd="http://nuxeo.org/nxweb/document"
   xmlns:nxl="http://nuxeo.org/nxforms/layout"
   xmlns:ui="http://java.sun.com/jsf/facelets"
-  xmlns:a4j="https://ajax4jsf.dev.java.net/ajax">
+  xmlns:a4j="https://ajax4jsf.dev.java.net/ajax" id="#{widget.id}_container">
 
   <c:set var="namespace" value="#{widgetProperty_namespace}" />
 
   <c:if test="#{widget.mode == 'view'}">
-
+      NOT SUPPORTED !!!
   </c:if>
 
   <c:if test="#{widget.mode == 'edit'}">
 
-      <ui:include src="/incl/select2_js.xhtml" />
       <script>
       function updateSubTree() {
-        var value = jQuery("input[id$=#{widget.id}_select2]").val()
+        var value = jQuery("##{widget.id}_container").find("input[id$=nxw_suggestOneDirectory_select2]").val();
         nxw_complexSelector_reRender(value);
       }
       </script>
 
+      <nxl:widgetType name="suggestOneDirectory" mode="edit"
+              id="#{widget.id}_superwidget"
+              ajaxReRender="#{widget.id}_nestedLayout" onchange="updateSubTree()"
+              value="#{field_0}"
+              field="#{field_0}"
+              translated="true"
+              localize="true"
+              directoryName="#{widgetProperty_directoryName}"
+              multiple="false"
+              dbl10n="false"
+              labelFieldName="label"
+              >
+      </nxl:widgetType>
+
       <a4j:region>
-        <nxu:valueHolder id="#{widget.id}_select2" value="#{field_0}"
-          immediate="true" ajaxSingle="true"
-          required="#{widgetProperty_required}" var="currentValue" ajaxListener="#{complexSelectorBean.valueChanged}">
-
-          <h:inputHidden readonly="true" id="#{widget.id}_select2_init"
-            value="#{select2Actions.resolveSingleDirectoryEntry(currentValue, widgetProperty_directoryName, widgetProperty_localize, widgetProperty_keySeparator, widgetProperty_dbl10n, widgetProperty_labelFieldName)}" />
-
-        </nxu:valueHolder>
-
           <a4j:jsFunction name="#{widget.id}_reRender"
             reRender="#{widget.id}_nestedLayout">
-            <a4j:actionparam name="param1" assignTo="#{complexSelectorBean.selectedValue}"/>
+            <a4j:actionparam name="param1" assignTo="#{widgetProperty_valueListener}"/>
           </a4j:jsFunction>
       </a4j:region>
 
       <a4j:outputPanel id="#{widget.id}_nestedLayout">
-            currentValue=#{currentValue}
           <nxl:layout name="#{widgetProperty_nestedLayout}" mode="edit" value="#{layoutValue}" />
       </a4j:outputPanel>
-
-      <h:inputHidden readonly="true" id="#{widget.id}_select2_params"
-        value="#{select2Actions.encodeParametersForDirectory(widget, widgetProperties)}" />
 
   </c:if>
 

@@ -65,16 +65,14 @@
       </widget>
       <widget name="complexSelector" type="template">
         <labels>
-          <label mode="any">ComplexSelector 2</label>
+          <label mode="any">ComplexSelector</label>
         </labels>
         <translated>false</translated>
         <fields>
           <field>ds:complexSelector</field>
         </fields>
         <properties widgetMode="edit">
-          <property name="template2">/widgets/complexSelector_widget_template.xhtml</property>
           <property name="template">/widgets/complexSuggestSelector_widget_template.xhtml</property>
-          <!-- <property name="valueChangeListener">#{complexSelectorBean.valueChanged}</property> -->
           <property name="directoryName">nature</property>
           <property name="multiple">false</property>
           <property name="localize">true</property>
@@ -82,10 +80,10 @@
           <property name="dbl10n">false</property>
           <property name="nestedLayout">complexListForm@create</property>
           <property name="onchange">updateSubTree();</property>
+          <property name="valueListener">#{complexSelectorBean.selectedValue}</property>
         </properties>
       </widget>
     </layout>
-
 
   </extension>
 
