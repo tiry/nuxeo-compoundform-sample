@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 
 import org.apache.commons.logging.Log;
@@ -38,6 +39,8 @@ import org.nuxeo.ecm.platform.ui.web.component.list.UIEditableList;
 public class ComplexSelectorBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    protected String selectedValue;
 
     protected List<Map<String, Serializable>> getComplexValues(String key) {
         List<Map<String, Serializable>> result = new ArrayList<>();
@@ -55,7 +58,6 @@ public class ComplexSelectorBean implements Serializable {
     /****** remove inheritance to avoid IDE problem */
     private static final Log log = LogFactory.getLog(ComplexSelectorBean.class);
 
-
     protected void cleanUpList(UIEditableList listComponent) {
         //listComponent.resetValue();
 
@@ -72,16 +74,37 @@ public class ComplexSelectorBean implements Serializable {
         }*/
     }
 
+
+    public void setSelectedValue(String value) {
+
+        selectedValue = value;
+        UIEditableList listComponent = findEditableList(FacesContext.getCurrentInstance().getViewRoot());
+        if (value!=null) {
+            List<Map<String, Serializable>> newEntries = getComplexValues(value.toString());
+
+            for (Map<String, Serializable> newEntry : newEntries) {
+                listComponent.addValue(newEntry);
+            }
+        }
+
+    }
+
+    public String getSelectedValue() {
+        return selectedValue;
+    }
+
     public void valueChanged(ValueChangeEvent evt) {
 
         Object value = evt.getNewValue();
+
 
         UIEditableList listComponent = findEditableList(evt.getComponent().getParent());
 
         cleanUpList(listComponent);
 
         if (value!=null) {
-            List<Map<String, Serializable>> newEntries = getComplexValues(value.toString());
+            selectedValue = value.toString();
+            List<Map<String, Serializable>> newEntries = getComplexValues(selectedValue);
 
             for (Map<String, Serializable> newEntry : newEntries) {
                 listComponent.addValue(newEntry);
