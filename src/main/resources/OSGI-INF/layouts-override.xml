@@ -76,6 +76,11 @@
           /widgets/complexSelector_widget_template.xhtml
           </property>
           <property name="valueChangeListener">#{complexSelectorBean.valueChanged}</property>
+          <property name="directoryName">nature</property>
+          <property name="localize">true</property>
+          <property name="labelFieldName">label</property>
+          <property name="dbl10n">false</property>
+          <property name="nestedLayout">complexListForm@create</property>
         </properties>
       </widget>
     </layout>
