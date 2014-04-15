@@ -32,7 +32,12 @@ import org.apache.commons.logging.LogFactory;
 import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
+import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentModelList;
+import org.nuxeo.ecm.directory.Session;
+import org.nuxeo.ecm.directory.api.DirectoryService;
 import org.nuxeo.ecm.platform.ui.web.component.list.UIEditableList;
+import org.nuxeo.runtime.api.Framework;
 
 @Name("complexSelectorBean")
 @Scope(ScopeType.EVENT)
@@ -42,20 +47,44 @@ public class ComplexSelectorBean implements Serializable {
 
     protected String selectedValue;
 
-    protected List<Map<String, Serializable>> getComplexValues(String key) {
+    protected List<Map<String, Serializable>> getComplexValues(String key) throws Exception {
+
+        DirectoryService ds = Framework.getLocalService(DirectoryService.class);
+
         List<Map<String, Serializable>> result = new ArrayList<>();
-        for (int i = 0; i <3; i++) {
-            Map<String, Serializable> entry = new HashMap<String, Serializable>();
-            entry.put("identifier", "id-" + key + " " + i);
-            entry.put("protocol", "Protocol " + key + " " + i);
-            entry.put("domain", "Domain " + key + " " + i);
-            entry.put("registrantName", "Registrant " + key + " " + i);
-            entry.put("description", "Description " + key + " " + i);
-            result.add(entry);
+
+        Session session = ds.open("nasaDataSets");
+
+        try {
+
+            // add filter to query on the target JSON WebService based directory
+            Map<String, Serializable> filter = new HashMap<>();
+            filter.put("category", key);
+
+            DocumentModelList items = session.query(filter);
+
+            // since I did not update the studio project : do the mapping by hand
+            for (DocumentModel item : items) {
+                Map<String, Serializable> entry = new HashMap<String, Serializable>();
+                entry.put("identifier", (String) item.getProperty("nasads", "id"));
+                entry.put("protocol", (String) item.getProperty("nasads", "slug"));
+                entry.put("domain", (String) item.getProperty("nasads", "url"));
+                entry.put("registrantName", (String) item.getProperty("nasads", "category"));
+                entry.put("description", (String) item.getProperty("nasads", "title"));
+                result.add(entry);
+            }
+
+        } finally {
+            session.close();
         }
         return result;
     }
 
+    /*
+     * ####################### everything below this line should be in the base class ###################################
+     * ##################################################################################################################
+     * ######### this code is just here as a workaround a classloader issue in nuxeo-ide hot-reload with Seam beans
+     */
 
     /****** remove inheritance to avoid IDE problem */
     private static final Log log = LogFactory.getLog(ComplexSelectorBean.class);
@@ -72,7 +101,7 @@ public class ComplexSelectorBean implements Serializable {
         selectedScope =scope;
     }
 
-    public void setSelectedValue(String value) {
+    public void setSelectedValue(String value) throws Exception {
 
         log.error("scope=" + selectedScope);
         selectedValue = value;
